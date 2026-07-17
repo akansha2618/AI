@@ -1,0 +1,32 @@
+j1=int(input("Enter capacity of jug 1: "))
+j2=int(input("Enter capacity of jug 2: "))
+goal=int(input("Enter target amount: "))
+visited=set()
+def dfs(x,y,path):
+    if x==goal or y==goal:
+        path.append((x,y))
+        print("\nGoal Achieved Successsfully!")
+        print("Soultion Path: ")
+        for state in path:
+            print(state)
+        return True
+    if(x,y)in visited:
+        return False
+    visited.add((x,y))
+    path.append((x,y))
+    next_states=[
+        (j1,y),
+        (x,j2),
+        (0,y),
+        (x,0),
+        (x-min(x,j2-y),
+        y-min(x,j2-y)),
+        (x+min(y,j1-x),
+         y+min(y,j1-x))
+    ]
+    for state in next_states:
+      if dfs(state[0],state[1],path.copy()):
+        return True
+    return False
+if not dfs(0,0,[]):
+    print("No solution found")
