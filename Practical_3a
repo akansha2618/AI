@@ -1,0 +1,66 @@
+import heapq
+def print_state(state):
+    for i in range(0,9,3):
+        print(state[i],state[i+1],state[i+2])
+    print()
+def heuristic(state,goal):
+    distance=0
+    for num in range(1,9):
+        current=state.index(num)
+        target=goal.index(num)
+        x1,y1=current//3,current%3
+        x2,y2=target//3,target%3
+        distance+=abs(x1-x2)+abs(y1-y2)
+    return distance
+def get_neighbors(state):
+    neighbors=[]
+    blank=state.index(0)
+    moves=[-3,3,-1,1]
+    for move in moves:
+        new=blank+move
+        if new>=0 and new<9:
+            if blank%3==0 and move==-1:
+                continue
+            if blank%3==2 and move==1:
+                continue
+            temp=list(state)
+            temp[blank],temp[new]=temp[new],temp[blank]
+            neighbors.append(tuple(temp))
+        return neighbors
+def greedy(initial,goal):
+    queue=[]
+    heapq.heappush(
+        queue,
+        (heuristic(initial,goal),initial,[])
+        )
+    visited=set()
+    while queue:
+        h,state,path=heapq.heappop(queue)
+        if state==goal:
+            return path+[state]
+        if state not in visited:
+            visited.add(state)
+            for next_state in get_neighbors(state):
+                heapq.heappush(
+                    queue,
+                    (heuristic(next_state,goal),
+                        next_state,
+                        path+[state])
+                    )
+            return None
+initial=(1,2,3,
+             4,0,6,
+             7,5,8)
+goal=(1,2,3,
+          4,5,6,
+          7,8,0)
+print("Initial State:")
+print_state(initial)
+print("Goal State: ")
+print_state(initial)
+solution=greedy(initial,goal)
+print("Solution: ")
+for step,state in enumerate(solution):
+    print("Step: ",step)
+    print_state(state)
+    print("Goal reached successfully..")
