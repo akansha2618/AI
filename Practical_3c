@@ -1,0 +1,47 @@
+import heapq
+
+graph = {
+    'Mumbai': [('Pune',75),('Kolkata',180),('Hyderabad',190)],
+    'Pune': [('Kolkata',175),('Hyderabad',199),('Mumbai',240),('Nagpur',300)],
+    'Hyderabad': [('Pune',65),('Kolkata',250),('Nagpur',200)],
+    'Kolkata': [('Mumbai',175),('Hyderabad',90)],
+    'Nagpur': []
+}
+
+heuristic = {
+    'Mumbai':120,
+    'Pune':340,
+    'Hyderabad':290,
+    'Kolkata':190,
+    'Nagpur':0
+}
+
+def astar(start, goal):
+    queue = []
+    heapq.heappush(queue, (heuristic[start], 0, start, [start]))
+    visited = set()
+
+    while queue:
+        f_cost, g_cost, city, path = heapq.heappop(queue)
+
+        if city == goal:
+            return g_cost, path
+
+        if city not in visited:
+            visited.add(city)
+
+            for neighbor, distance in graph[city]:
+                new_g = g_cost + distance
+                new_f = new_g + heuristic.get(neighbor, 0)
+                heapq.heappush(queue, (new_f, new_g, neighbor, path + [neighbor]))
+
+    return None, []
+
+cost, path = astar('Mumbai', 'Nagpur')
+
+if cost is None:
+    print("No path found.")
+else:
+    print("Shortest path using A* Search:")
+    print("Path:", " -> ".join(path))
+    print("Total Cost:", cost)
