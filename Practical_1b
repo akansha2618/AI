@@ -1,0 +1,25 @@
+table={
+('Green','No','No'):'Move Forward',
+('Green','Yes','No'):'Stop',
+('Red','No','No'):'Stop',
+('Yellow','No','No'):'Slow Down',
+('Green','No','Yes'):'Pick Up Passenger',
+('Red','Yes','No'):'Stop',
+('Yellow','Yes','No'):'Stop',
+}
+precepts=[]
+def taxi_agent(precept):
+precepts.append(precept)
+action=table.get(precept,"Wait")
+return action
+print("Autonomous Taxi Table-Driven Agent")
+n=int(input("Enter Number of Precepts: "))
+for i in range(n):
+print(f"\nPrecept {i+1}")
+signal=input("Traffic Signal(Green/Yellow/Red): ").capitalize()
+obstacle=input("Obstacle Present(Yes/No): ").capitalize()
+passenger=input("Passenger Request? (Yes/No): ").capitalize()
+precept=(signal,obstacle,passenger)
+action=taxi_agent(precept)
+print("Current Percept: ",precepts)
+print("Agent action: ",action)
