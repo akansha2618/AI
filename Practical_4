@@ -1,0 +1,19 @@
+Scenario:
+A medical test is used to detect a particular disease.
+The probability that a randomly selected person has the disease is 1%.
+If a person has the disease, the test returns positive with probability 99%.
+If a person does not have the disease, the test still returns positive with
+probability 5% (false positive rate).
+A person takes the test and receives a positive result.
+#Probability of having disease
+P_D=0.01
+#Probability of positive test if disease exists
+P_Pos_D=0.99
+#Probability of positive test if disease does not exist
+P_Pos_NotD=0.05
+#Probability of not having disease
+P_NotD=1-P_D
+#Bayes Rule
+P_D_Pos=(P_Pos_D*P_D)/((P_Pos_D*P_D)+(P_Pos_NotD*P_NotD))
+print("Probability that person actually has disease: ")
+print(round(P_D_Pos * 100,2),"%")
