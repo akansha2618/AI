@@ -1,0 +1,28 @@
+table={
+('A','Clean'):"Suck",
+('A','Dirty'):"Right",
+('B','Clean'):"Suck",
+('B','Dirty'):"Left"
+}
+sequence_table={
+(('A','Dirty'),('A','Clean')):"Right",
+(('B','Dirty'),('A','Clean')):"Suck",
+(('B','Dirty'),('B','Clean')):"Left",
+(('A','Dirty'),('B','Clean')):"Suck",
+}
+precepts=[]
+def table_agent(precept):
+precepts.append(precept)
+if tuple(precepts)in sequence_table:
+return sequence_table[tuple(precepts)]
+return table.get(precept,"NoOP")
+print("Vaccum cleaner table-driven agent")
+n=int(input("Enter Number of Precepts: "))
+for i in range(n):
+print(f"\nPrecept {i+1}")
+locat=input("Enter Location (A/B): ").upper()
+status=input("Enter Status (Clean/dirty): ").capitalize()
+precept=(locat,status)
+action=table_agent(precept)
+print("precept History: ",precepts)
+print("Agent action: ",action)
