@@ -1,0 +1,173 @@
+Load the Dataset
+import pandas as pd
+# Load dataset from CSV file
+df = pd.read_csv('iris.csv')
+
+Display the Dataset
+
+# Display the first 5 rows
+print("--- First 5 Rows of Dataset ---")
+print(df.head())
+
+Check Dataset Information
+# Print concise summary of dataframe structure
+print("--- Dataset Info ---")
+df.info()
+
+Display Dataset Shape
+# Display total number of rows and columns
+print(f"Dataset Shape: {df.shape[0]} Rows, {df.shape[1]} Columns")
+Display Column Names
+# Print all column headers as a list
+print("Column Names:")
+print(list(df.columns))
+
+ Display Column Names
+Python
+# Print all column headers as a list
+print("Column Names:")
+print(list(df.columns))
+
+Display Summary Statistics
+# Display statistical summary for all columns
+print("--- Summary Statistics ---")
+print(df.describe(include='all'))
+
+Check Data Types
+# Display data type of each column
+print("Data Types:")
+print(df.dtypes)
+
+Check Missing Values
+# Count missing/null values per column
+print("Missing Values Count:")
+print(df.isnull().sum())
+
+Handle Missing Values
+import numpy as np
+
+# Impute numeric columns with median, categorical with mode
+num_cols = df.select_dtypes(include=[np.number]).columns
+cat_cols = df.select_dtypes(include=['object']).columns
+
+for col in num_cols:
+    if df[col].isnull().sum() > 0:
+        df[col] = df[col].fillna(df[col].median())
+
+for col in cat_cols:
+    if df[col].isnull().sum() > 0:
+        df[col] = df[col].fillna(df[col].mode()[0])
+
+print("Total Missing Values After Handling:", df.isnull().sum().sum())
+
+Remove Duplicate Records
+# Remove duplicate rows from dataset
+initial_rows = len(df)
+df = df.drop_duplicates()
+print(f"Removed {initial_rows - len(df)} duplicate row(s). New shape: {df.shape}")
+
+Encode Categorical Data (Label Encoding / One-Hot Encoding)
+from sklearn.preprocessing import LabelEncoder
+
+# Encode categorical text columns into numbers
+label_encoders = {}
+for col in df.select_dtypes(include=['object']).columns:
+    le = LabelEncoder()
+    df[col] = le.fit_transform(df[col].astype(str))
+    label_encoders[col] = le
+    print(f"Encoded column '{col}' successfully.")
+
+Rename Columns
+# Clean and standardize column headers (lowercase and underscores)
+df = df.rename(columns=lambda x: x.strip().lower().replace(" ", "_"))
+print("Updated Column Names:", list(df.columns))
+
+Drop Unnecessary Columns
+# Drop ID or date columns if present
+unnecessary_cols = ['id', 'order_id', 'customer_id', 'order_date']
+drop_targets = [col for col in unnecessary_cols if col in df.columns]
+
+if drop_targets:
+    df = df.drop(columns=drop_targets)
+    print(f"Dropped columns: {drop_targets}")
+else:
+    print("No unnecessary columns found to drop.")
+
+Select Features (Feature Selection)
+# Select feature columns by excluding target column
+target_col = 'species'  # Change to 'customer_rating' for ecomer.csv
+feature_cols = [col for col in df.columns if col != target_col]
+
+X_selected = df[feature_cols].copy()
+print("Selected Features:", list(X_selected.columns))
+
+Create New Features (Feature Engineering)
+# Create new engineered features
+if 'sepal_length' in df.columns and 'sepal_width' in df.columns:
+    df['sepal_ratio'] = df['sepal_length'] / df['sepal_width']
+    df['petal_area'] = df['petal_length'] * df['petal_width']
+    print("Created features: 'sepal_ratio' and 'petal_area'")
+elif 'unit_price' in df.columns and 'quantity' in df.columns:
+    df['effective_unit_price'] = df['unit_price'] * (1 - df['discount'])
+    df['quantity_per_delivery_day'] = df['quantity'] / (df['delivery_days'] + 1e-5)
+    print("Created features: 'effective_unit_price' and 'quantity_per_delivery_day'")
+
+Convert Data Types
+# Convert float64 feature columns to float32 for memory efficiency
+target_col = 'species'
+
+for col in df.columns:
+    if col != target_col and df[col].dtype == 'float64':
+        df[col] = df[col].astype('float32')
+
+print("Converted float64 feature columns to float32.")
+
+Normalize Data (Min-Max Scaling)
+from sklearn.preprocessing import MinMaxScaler
+
+# Scale feature values to a range of 0 to 1
+min_max_scaler = MinMaxScaler()
+X_normalized = pd.DataFrame(min_max_scaler.fit_transform(X), columns=X.columns)
+
+print("--- Normalized Features (First 2 Rows) ---")
+print(X_normalized.head(2))
+
+Standardize Data (Standard Scaling)
+from sklearn.preprocessing import StandardScaler
+
+# Transform features to have Mean = 0 and Variance = 1
+std_scaler = StandardScaler()
+X_standardized = pd.DataFrame(std_scaler.fit_transform(X), columns=X.columns)
+
+print("--- Standardized Features (First 2 Rows) ---")
+print(X_standardized.head(2))
+
+Split Features and Target Variable
+# Separate input features (X) and target variable (y)
+target_col = 'species'  # Change to 'customer_rating' for ecomer.csv
+X = df.drop(columns=[target_col])
+y = df[target_col].astype(int)
+
+print(f"Features (X) Shape: {X.shape} | Target (y) Shape: {y.shape}")
+
+c. Split the dataset into training and testing sets.
+from sklearn.model_selection import train_test_split
+# Split into 80% Training and 20% Testing sets
+X_train, X_test, y_train, y_test = train_test_split(
+    X_standardized, y, test_size=0.2, random_state=42
+)
+print(f"X_train Shape: {X_train.shape} | X_test Shape: {X_test.shape}")
+
+d. Train a simple classifier.
+e. Display training and testing accuracy.
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+# Train Random Forest Classifier
+classifier = RandomForestClassifier(random_state=42)
+classifier.fit(X_train, y_train)
+# Calculate and display accuracies
+train_acc = accuracy_score(y_train, classifier.predict(X_train))
+test_acc = accuracy_score(y_test, classifier.predict(X_test))
+print(f"Training Accuracy : {train_acc * 100:.2f}%")
+print(f"Testing Accuracy  : {test_acc * 100:.2f}%")
+
