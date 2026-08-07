@@ -1,0 +1,29 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+data=pd.read_csv("student_marks - Sheet1.csv")
+data.head()
+#input and output
+x=data[['Hours']]
+y=data['Marks']
+#split dataset
+x_train,x_test,y_train,y_test=train_test_split(
+    x,
+    y,
+    test_size=0.3,
+    random_state=1
+)
+#train model
+model=LinearRegression()
+model.fit(x_train,y_train)
+#display accuracy
+print("Training Accuracy: ",
+      round(model.score(x_train,y_train)*100,2))
+print("Testing Accuracy: ",
+      round(model.score(x_test,y_test)*100,2))
+print("Akansha T038")
+#predict marks for 11 study hours
+new_data=pd.DataFrame([[11]],columns=['Hours'])
+pred=model.predict(new_data)
+print("Prediction Marks for 11 hours: ",round(pred[0],2))
+print("Akansha T038")
