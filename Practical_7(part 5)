@@ -1,0 +1,44 @@
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+iris=load_iris()
+x=iris.data
+y=iris.target
+x_train,x_test,y_train,y_test=train_test_split(
+    x,
+    y,
+    test_size=0.3,
+    random_state=1
+)
+#create model
+model=DecisionTreeClassifier()
+#train model
+model.fit(x_train,y_train)
+print("Training Accuracy: ",model.score(x_train,y_train)*100)
+print("Testing Accuracy: ",model.score(x_test,y_test)*100)
+prediction=model.predict([x_test[0]])
+print("Prediction Class: ",prediction[0])
+print("Akansha T038")
+
+OWN DATASET
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+digit=load_digits()
+x=digit.data
+y=digit.target
+x_train,x_test,y_train,y_test=train_test_split(
+    x,
+    y,
+    test_size=0.3,
+    random_state=1
+)
+#create model
+model=DecisionTreeClassifier()
+#train model
+model.fit(x_train,y_train)
+print("Training Accuracy: ",model.score(x_train,y_train)*100)
+print("Testing Accuracy: ",model.score(x_test,y_test)*100)
+prediction=model.predict([x_test[0]])
+print("Prediction Class: ",prediction[0])
+print("Akansha T038")
