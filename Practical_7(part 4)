@@ -1,0 +1,29 @@
+from sklearn.datasets import load_iris
+from sklearn.model_selection import cross_val_score
+from sklearn.neighbors import KNeighborsClassifier
+iris=load_iris()
+x=iris.data
+y =iris.target
+#create classification model
+model=KNeighborsClassifier()
+#Apply 5-fold cross-validation
+scores=cross_val_score(model,x,y,cv=5)
+print("Accuracy scores for each fold: ")
+print(scores)
+print("Average Accuracy: ",round(scores.mean()*100,2),"%")
+print("Akansha T038")
+
+OWN DATASET
+from sklearn.datasets import load_digits
+from sklearn.model_selection import cross_val_score
+from sklearn.neighbors import KNeighborsClassifier
+digits = load_digits()
+x = digits.data
+y = digits.target
+model = KNeighborsClassifier()
+# Apply 5-fold cross-validation
+scores = cross_val_score(model, x, y, cv=5)
+print("Accuracy scores for each fold:")
+print(scores)
+print("Average Accuracy:", round(scores.mean() * 100, 2), "%")
+print("Akansha T038")
