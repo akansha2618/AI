@@ -1,0 +1,16 @@
+services:
+  sentinel-firewall:
+    build: .
+    image: sentinel-firewall:local
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      AUDIT_LOG_FILE: /app/data/firewall_audit.log
+    volumes:
+      - sentinel-audit:/app/data
+    restart: unless-stopped
+
+volumes:
+  sentinel-audit:
